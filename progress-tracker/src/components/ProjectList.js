@@ -1,27 +1,18 @@
 import {useEffect, useState} from "react";
 import ProjectLink from "./ProjectLink";
-import {Card, CardContent, Fab, Paper} from "@mui/material";
 import Grid from "@mui/material/Grid";
-import AddIcon from '@mui/icons-material/Add';
 import AddNewProjectModal from "./AddNewProjectModal";
 
 export default function ProjectList(props){
     const [error, setError] = useState(null);
     const [isLoaded, setIsLoaded] = useState(false);
     const [items, setItems] = useState([]);
+    const [numberOfChanges, setNumberOfChanges] = useState(0);
+
+    //const addNumberOfChanges = () => {setNumberOfChanges(numberOfChanges + 1)}
 
     useEffect(() => {
-        let url = ''
-        switch(String(props.userType)){
-            case "admin":
-                url = "/admin/projects";
-                break;
-            case "owner":
-                url = "/owner/projects";
-                break;
-            default:
-                console.log(props.userType)
-        }
+        let url = "/" + `${props.userType}` + "/projects"
         fetch(url)
             .then(res => res.json())
             .then(
@@ -34,7 +25,7 @@ export default function ProjectList(props){
                     setError(error);
                 }
             )
-    }, [])
+    }, [numberOfChanges])
 
     if (error) {
         return <div>Error: {error.message}</div>;
@@ -52,7 +43,7 @@ export default function ProjectList(props){
                     </ProjectLink>
                 ))}
                 <Grid item xs={1} sm={1} md={1} marginTop={3}>
-                    <AddNewProjectModal />
+                    <AddNewProjectModal addNumberOfChanges={setNumberOfChanges} numberOfChanges={numberOfChanges}/>
                 </Grid>
             </Grid>
         );

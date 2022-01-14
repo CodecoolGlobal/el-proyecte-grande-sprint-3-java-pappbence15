@@ -22,7 +22,7 @@ const addStyle = {
     backgroundColor: "#61dafb"
 }
 
-export default function AddNewProjectModal() {
+export default function AddNewProjectModal(props) {
     const [open, setOpen] = useState(false);
     const handleOpen = () => setOpen(true);
     const handleClose = () => setOpen(false);
@@ -43,7 +43,7 @@ export default function AddNewProjectModal() {
             headers: {"Content-Type": "application/json"}
         })
             .then( ()=> handleClose())
-
+        props.addNumberOfChanges(props.numberOfChanges + 1)
     }
 
 
